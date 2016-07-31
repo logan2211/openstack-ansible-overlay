@@ -1,0 +1,1 @@
+../../../openstack-ansible/playbooks/inventory/dynamic_inventory.py

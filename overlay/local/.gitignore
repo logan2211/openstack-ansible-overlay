@@ -1,0 +1,7 @@
+*
+!.gitignore
+!group_vars/
+!env.d/
+!openstack_deploy/
+!openstack_deploy/examples/
+!openstack_deploy/examples/*
