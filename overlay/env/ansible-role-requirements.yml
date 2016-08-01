@@ -8,3 +8,19 @@
   scm: git
   src: https://github.com/resmo/ansible-role-ntp
   version: master
+- name: ceph-common
+  scm: git
+  src: https://git.lstn.net/mirror/ansible-ceph-common.git
+  version: master
+- name: ceph.ceph-common
+  scm: git
+  src: https://git.lstn.net/mirror/ansible-ceph-common.git
+  version: master
+- name: ceph-mon
+  scm: git
+  src: https://git.lstn.net/mirror/ansible-ceph-mon.git
+  version: master
+- name: ceph-osd
+  scm: git
+  src: https://git.lstn.net/mirror/ansible-ceph-osd.git
+  version: master
