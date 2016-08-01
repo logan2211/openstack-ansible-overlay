@@ -1,0 +1,54 @@
+---
+# Copyright 2016, Logan Vig <logan2211@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#ceph environment configuration here. these apply primarily to the ceph-ansible dependent roles
+
+ceph_stable: true
+ceph_stable_release: jewel
+fetch_directory: /etc/openstack_deploy/ceph-fetch/
+
+#ansible group names to deploy ceph roles to
+mon_group_name: ceph-mon
+osd_group_name: ceph-osd
+
+#for ceph_client role in OSA, we have to feed it mon ips
+ceph_mons: "[ {% for host in groups[mon_group_name] %}'{{ hostvars[host]['ansible_host'] }}'{% if not loop.last %},{% endif %}{% endfor %} ]"
+
+#for monitors in containers.. usually eth1 is management network.
+monitor_interface: eth1
+
+#define the ceph public networks (comma delimited, used for all ceph client and mon traffic.
+# osd traffic will use cluster_network if defined otherwise public_network is used.)
+#for AIO, the management cidr is 172.29.236.0/22 so we use this.
+public_network: "172.29.236.0/22"
+
+#create openstack pools automatically
+openstack_config: true
+
+#osd disk layout
+#/dev/sda is used as a journal drive (should be SSD)
+#/dev/sdb-sde are used as OSDs
+journal_size: 10000
+raw_multi_journal: true
+raw_journal_devices:
+  - /dev/sda
+  - /dev/sda
+  - /dev/sda
+  - /dev/sda
+devices:
+  - /dev/sdb
+  - /dev/sdc
+  - /dev/sdd
+  - /dev/sde

@@ -1,0 +1,71 @@
+---
+# Copyright 2016, Logan Vig <logan2211@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- hosts: localhost
+  user: root
+  tasks:
+    - name: Create sparse ceph OSD files
+      shell: "truncate -s {{ bootstrap_host_loopback_ceph_size }}G /openstack/{{ item }}.img"
+      args:
+        creates: "/openstack/{{ item }}.img"
+      with_items: "{{ ceph_osd_images }}"
+      register: ceph_create
+      tags:
+        - ceph-file-create
+    - name: Create the ceph loopback device
+      shell: "losetup -f /openstack/{{ item.item }}.img --show"
+      with_items: "{{ ceph_create.results }}"
+      register: ceph_create_loopback
+      when: item|changed
+    - name: Ensure that rc.local exists
+      file:
+        path: /etc/rc.local
+        state: touch
+        mode: "u+x"
+      tags:
+        - ceph-rc-file
+    - name: Create ceph loopback at boot time
+      lineinfile:
+        dest: /etc/rc.local
+        line: "losetup -f /openstack/{{ item }}.img"
+      with_items: "{{ ceph_osd_images }}"
+    - name: Create ceph cluster uuid
+      shell: python -c 'import uuid; print(str(uuid.uuid4()))'
+      register: cluster_uuid
+      become: false
+    - name: Write ceph cluster uuid if it does not exist
+      copy:
+        content: |
+          ---
+          common_single_host_mode: true
+          ceph_cluster_uuid: {{ cluster_uuid.stdout }}
+          fsid: "{% raw %}{{ ceph_cluster_uuid }}{% endraw %}"
+          osd_group_name: "compute_hosts"
+          journal_size: 100
+          journal_collocation: true
+          pool_default_pg_num: 32
+          raw_multi_journal: false
+          raw_journal_devices: []
+          devices: {{ ceph_create_loopback.results | map(attribute='stdout') | list | to_yaml | trim }}
+        dest: "../overlay/local/openstack_deploy/user_ceph.yml"
+        force: no
+      become: false
+      when: ceph_create_loopback|changed
+  vars:
+    bootstrap_host_loopback_ceph_size: 1024
+    ceph_osd_images:
+      - 'ceph1'
+      - 'ceph2'
+      - 'ceph3'

@@ -1,0 +1,33 @@
+---
+component_skel:
+  ceph-mon:
+    belongs_to:
+      - ceph_all
+  ceph-osd:
+    belongs_to:
+      - ceph_all
+
+container_skel:
+  ceph-mon_container:
+    belongs_to:
+      - shared-infra_containers
+    contains:
+      - ceph-mon
+    properties:
+      service_name: ceph-mon
+  ceph-osd_container:
+    belongs_to:
+      - ceph-osd_containers
+    contains:
+      - ceph-osd
+    properties:
+      is_metal: true
+      service_name: ceph
+
+physical_skel:
+  ceph-osd_containers:
+    belongs_to:
+      - all_containers
+  ceph-osd_hosts:
+    belongs_to:
+      - hosts

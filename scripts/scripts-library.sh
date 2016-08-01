@@ -14,9 +14,8 @@
 # limitations under the License.
 
 export UPDATE_ANSIBLE=${UPDATE_ANSIBLE:-false}
-export UPDATE_DEPLOY_CONFIG=${UPDATE_DEPLOY_CONFIG:-"yes"}
+export UPDATE_DEPLOY_CONFIG=${UPDATE_DEPLOY_CONFIG:-true}
 export DEPLOY_AIO=${DEPLOY_AIO:-false}
-export DEPLOY_LB=${DEPLOY_LB:-"yes"}
 export DEPLOY_OA=${DEPLOY_OA:-false}
 export FORKS=${FORKS:-$(grep -c ^processor /proc/cpuinfo)}
 export ANSIBLE_PARAMETERS=${ANSIBLE_PARAMETERS:-""}

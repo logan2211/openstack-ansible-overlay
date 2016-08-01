@@ -24,6 +24,8 @@ export ANSIBLE_ROLE_FETCH_MODE="git-clone"
 export UPDATE_ANSIBLE=true
 export DEPLOY_AIO=true
 export DEPLOY_OA=true
+export DEPLOY_CEPH=true
+export DEPLOY_TEMPEST=true
 
 $(dirname ${0})/deploy.sh
 

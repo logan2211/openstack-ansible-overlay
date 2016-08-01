@@ -14,3 +14,24 @@
 # limitations under the License.
 
 service_region: test.com
+
+cinder_ceph_client: cinder
+
+cinder_default_volume_type: RBD
+cinder_backends:
+  "RBD":
+    volume_driver: cinder.volume.drivers.rbd.RBDDriver
+    rbd_pool: volumes
+    rbd_ceph_conf: /etc/ceph/ceph.conf
+    rbd_store_chunk_size: 8
+    volume_backend_name: rbddriver
+    rbd_user: "{{ cinder_ceph_client }}"
+    rbd_secret_uuid: "{{ ceph_cluster_uuid }}"
+    report_discard_supported: true
+
+glance_ceph_client: glance
+glance_default_store: rbd
+glance_rbd_store_pool: images
+
+nova_libvirt_images_rbd_pool: vms
+nova_ceph_client_uuid: "{{ ceph_cluster_uuid }}"
