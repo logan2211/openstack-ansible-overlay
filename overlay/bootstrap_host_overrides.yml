@@ -13,7 +13,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# insert overrides for the openstack-ansible/tests/roles/bootstrap-host role
-# in this file.
-
-openstack_user_config_overrides: {}
+openstack_user_config_overrides:
+  cidr_networks:
+    container: 172.29.236.0/22
+    storage: 172.29.244.0/22
+  used_ips:
+    - "172.29.236.1,172.29.236.50"
+    - "172.29.244.1,172.29.244.50"
+  global_overrides:
+    internal_lb_vip_address: 172.29.236.100
+    # The external IP is quoted simply to ensure that the .aio file can be used as input
+    # dynamic inventory testing.
+    external_lb_vip_address: "{{ bootstrap_host_public_address | default(ansible_default_ipv4.address) }}"
+    management_bridge: "br-mgmt"
+    provider_networks:
+      - network:
+          container_bridge: "br-mgmt"
+          container_type: "veth"
+          container_interface: "eth1"
+          ip_from_q: "container"
+          type: "raw"
+          group_binds:
+            - all_containers
+            - hosts
+          is_container_address: true
+          is_ssh_address: true
+      - network:
+          container_bridge: "br-storage"
+          container_type: "veth"
+          container_interface: "eth2"
+          ip_from_q: "storage"
+          type: "raw"
+          group_binds:
+            - glance_api
+            - cinder_api
+            - cinder_volume
+            - nova_compute
+            - swift_proxy
