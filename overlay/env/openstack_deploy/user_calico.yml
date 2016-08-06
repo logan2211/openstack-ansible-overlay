@@ -13,4 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-openstack_user_config_overrides: {}
+neutron_plugin_type: ml2.calico
+nova_network_type: calico
+
+#needed to fix neutron_optional_*_pip_packages not being built
+repo_build_wheel_selective: no
+
+tempest_private_net_provider_type: "local"
+tempest_private_net_seg_id: ''
+tempest_public_net_provider_type: "local"
+tempest_public_net_physical_type: ''
+tempest_tempest_conf_overrides:
+  network:
+    tenant_network_cidr: '192.168.75.0/24'
