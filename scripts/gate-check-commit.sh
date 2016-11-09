@@ -26,3 +26,8 @@ export DEPLOY_AIO=true
 export DEPLOY_OA=true
 
 $(dirname ${0})/deploy.sh
+
+#move to OSA directory to run tempest
+pushd $(dirname ${0})/../openstack-ansible
+  scripts/run-tempest.sh
+popd
