@@ -13,11 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# insert overrides for the openstack-ansible/tests/roles/bootstrap-host role
-# in this file.
+neutron_plugin_type: ml2.dragonflow
 
-user_variables_overrides:
-  neutron_plugin_base:
-    - df-l3
-    - metering
-    - neutron_lbaas.services.loadbalancer.plugin.LoadBalancerPluginv2
+nova_console_type: novnc

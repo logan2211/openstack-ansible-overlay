@@ -8,3 +8,8 @@
   scm: git
   src: https://github.com/resmo/ansible-role-ntp
   version: master
+- name: os_neutron
+  scm: git
+  src: https://git.openstack.org/openstack/openstack-ansible-os_neutron
+  version: f04ff4b9aad245f4105393a015b72f8e04af9833 # Patch set 74
+  refspec: '+refs/changes/24/391524/*:refs/remotes/origin/changes/24/391524/*'
