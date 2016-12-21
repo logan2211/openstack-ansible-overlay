@@ -24,3 +24,8 @@
   scm: git
   src: https://git.lstn.net/mirror/ansible-ceph-osd.git
   version: master
+- name: os_glance
+  scm: git
+  src: https://git.openstack.org/openstack/openstack-ansible-os_glance
+  version: cda80403a903c6d5390f06477dfaf5901ee790d9 # Patch set 1
+  refspec: '+refs/changes/74/413174/*:refs/remotes/origin/changes/74/413174/*'
