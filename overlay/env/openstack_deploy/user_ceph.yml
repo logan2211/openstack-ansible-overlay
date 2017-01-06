@@ -16,7 +16,7 @@
 #ceph environment configuration here. these apply primarily to the ceph-ansible dependent roles
 
 ceph_stable: true
-ceph_stable_release: jewel
+ceph_stable_release: hammer
 fetch_directory: /etc/openstack_deploy/ceph-fetch/
 
 #ansible group names to deploy ceph roles to
