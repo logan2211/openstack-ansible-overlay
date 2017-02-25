@@ -16,4 +16,18 @@
 # insert overrides for the openstack-ansible/tests/roles/bootstrap-host role
 # in this file.
 
-openstack_user_config_overrides: {}
+confd_overrides:
+  aio:
+    - name: cinder.yml.aio
+    - name: glance.yml.aio
+    - name: horizon.yml.aio
+    - name: keystone.yml.aio
+    - name: neutron.yml.aio
+    - name: nova.yml.aio
+
+openstack_user_config_overrides:
+  identity_hosts:
+    aio1:
+      affinity:
+        keystone_container: 3
+      ip: 172.29.236.100

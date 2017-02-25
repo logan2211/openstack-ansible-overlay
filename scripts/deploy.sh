@@ -54,5 +54,23 @@ if [[ "${DEPLOY_OA}" = true ]]; then
 
   pushd ${OVERLAY_DIR}/playbooks
     run_ansible ntp-install.yml
+
+    # Create a few credentials in the keystone DB
+    ansible -i inventory utility[0] -m command -a 'openstack --os-cloud default ec2 credentials create'
+    ansible -i inventory utility[0] -m command -a 'openstack --os-cloud default ec2 credentials create'
+    ansible -i inventory utility[0] -m command -a 'openstack --os-cloud default ec2 credentials create'
+    ansible -i inventory utility[0] -m command -a 'openstack --os-cloud default ec2 credentials create'
+    ansible -i inventory utility[0] -m command -a 'openstack --os-cloud default ec2 credentials create'
+  popd
+
+  #Destroy the keystone[0] container and redeploy
+  pushd ${OA_DIR}/playbooks
+    ANSIBLE_PARAMETERS="--limit keystone_all[0] -e force_containers_destroy=yes -e force_containers_data_destroy=yes"
+    run_ansible lxc-containers-destroy.yml
+    run_ansible lxc-containers-create.yml
+    ANSIBLE_PARAMETERS=""
+    run_ansible os-keystone-install.yml
+    run_ansible os-keystone-install.yml
+    run_ansible os-keystone-install.yml
   popd
 fi

@@ -8,3 +8,8 @@
   scm: git
   src: https://github.com/resmo/ansible-role-ntp
   version: master
+- name: os_keystone
+  scm: git
+  src: https://git.openstack.org/openstack/openstack-ansible-os_keystone
+  version: 1bad62e9c5860756613989aece94a69e0676ddc3 # Patch set 7
+  refspec: '+refs/changes/64/441264/*:refs/remotes/origin/changes/64/441264/*'
